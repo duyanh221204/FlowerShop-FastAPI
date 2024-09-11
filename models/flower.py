@@ -10,4 +10,4 @@ class Flower(Base):
     price = Column(Integer, nullable=False)
     quantity = Column(Integer, nullable=False)
     description = Column(String(10000), nullable=False)
-    order_details = relationship("OrderDetail", back_populates="flower")
+    order_details = relationship("OrderDetail", back_populates="flower", cascade="all, delete-orphan")

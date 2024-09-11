@@ -7,7 +7,7 @@ from services.authentication_service import register_user, authenticate_user
 
 router = APIRouter(
     prefix="/api/auth",
-    tags=["auth"]
+    tags=["Authentication"]
 )
 
 
@@ -21,7 +21,4 @@ async def create_user(data: Register, db=Depends(get_db)):
 
 @router.post("/token")
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db=Depends(get_db)):
-    try:
-        return authenticate_user(form_data, db)
-    except Exception:
-        return raise_error(100001)
+    return authenticate_user(form_data, db)

@@ -7,7 +7,7 @@ class Register(BaseModel):
     first_name: str = Field(min_length=2)
     last_name: str = Field(min_length=2)
     password: str = Field(min_length=8, max_length=20)
-    role: str = "user"
+    role: str = "customer"
 
 
 class Token(BaseModel):
@@ -19,3 +19,8 @@ class TokenData(BaseModel):
     id: int
     username: str
     role: str
+
+
+class PasswordChange(BaseModel):
+    current_password: str = Field(min_length=8, max_length=20)
+    new_password: str = Field(min_length=8, max_length=20)

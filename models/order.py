@@ -11,4 +11,4 @@ class Order(Base):
     year = Column(Integer, nullable=False)
     user_id = Column(Integer, ForeignKey("Users.id"), nullable=False)
     user = relationship("User", back_populates="orders")
-    order_details = relationship("OrderDetail", back_populates="order")
+    order_details = relationship("OrderDetail", back_populates="order", cascade="all, delete-orphan")
