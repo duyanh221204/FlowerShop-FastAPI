@@ -17,7 +17,11 @@ ERROR_CODES = {
     200003: "Flower not found!",
     200004: "Flower existed!",
     200005: "Cannot update flower!",
-    200006: "Cannot delete flower!"
+    200006: "Cannot delete flower!",
+
+    300001: "Cannot get order!",
+    300002: "Cannot create order!",
+    300003: "Order not found!"
 }
 
 
