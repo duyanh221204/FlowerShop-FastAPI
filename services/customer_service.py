@@ -38,6 +38,8 @@ def get_all(user_id: int, db: Session) -> List[OrderResponse]:
 
 
 def get_by_id(user_id: int, order_id: int, db: Session) -> OrderResponse | BaseResponse:
+    if order_id < 1:
+        return raise_error(10)
     order_model = db.query(Order).filter(
         Order.user_id == user_id,
         Order.id == order_id

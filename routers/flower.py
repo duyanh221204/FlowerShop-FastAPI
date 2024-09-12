@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Path
+from fastapi import APIRouter, Depends
 from exceptions import raise_error
 from schemas.flower import FlowerCreate
 from configs.database import get_db
@@ -20,7 +20,7 @@ async def get_flowers(db=Depends(get_db)):
 
 
 @router.get("/get-flower-by-id/{flower_id}")
-async def get_flower_by_id(flower_id: int = Path(gt=0), db=Depends(get_db)):
+async def get_flower_by_id(flower_id: int, db=Depends(get_db)):
     try:
         return get_by_id(flower_id, db)
     except Exception:
@@ -40,7 +40,7 @@ async def create_flower(flower: FlowerCreate, user=Depends(get_current_user), db
 
 
 @router.put("/update-flower/{flower_id}")
-async def update_flower(flower_update: FlowerCreate, flower_id: int = Path(gt=0), user=Depends(get_current_user), db=Depends(get_db)):
+async def update_flower(flower_update: FlowerCreate, flower_id: int, user=Depends(get_current_user), db=Depends(get_db)):
     try:
         if user is None:
             return raise_error(100002)
@@ -52,7 +52,7 @@ async def update_flower(flower_update: FlowerCreate, flower_id: int = Path(gt=0)
 
 
 @router.delete("/delete-flower/{flower_id}")
-async def delete_flower(flower_id: int = Path(gt=0), user=Depends(get_current_user), db=Depends(get_db)):
+async def delete_flower(flower_id: int, user=Depends(get_current_user), db=Depends(get_db)):
     try:
         if user is None:
             return raise_error(100002)

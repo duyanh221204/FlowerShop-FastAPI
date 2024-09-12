@@ -4,6 +4,9 @@ ERROR_CODES = {
     1: "For sellers only",
     2: "For customers only",
 
+    10: "Value should be greater than 0!",
+    11: "Quarter should be in range [1, 4]!",
+
     100001: "Login failed!",
     100002: "Cannot validate user!",
     100003: "Username existed!",
@@ -21,7 +24,12 @@ ERROR_CODES = {
 
     300001: "Cannot get order!",
     300002: "Cannot create order!",
-    300003: "Order not found!"
+    300003: "Order not found!",
+
+    400001: "Cannot get information!",
+    400002: "Information not found!",
+
+    500001: "Invalid date!"
 }
 
 

@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, Path
+from fastapi import APIRouter, Depends
 from exceptions import raise_error
-from services.order_service import get_all, get_by_id, create
+from services.customer_service import get_all, get_by_id, create
 from configs.database import get_db
 from configs.authentication import get_current_user
 from schemas.order import OrderCreate
@@ -24,7 +24,7 @@ async def get_orders(user=Depends(get_current_user), db=Depends(get_db)):
 
 
 @router.get("/get-order-by-id/{order_id}")
-async def get_order_by_id(order_id: int = Path(gt=0), user=Depends(get_current_user), db=Depends(get_db)):
+async def get_order_by_id(order_id: int, user=Depends(get_current_user), db=Depends(get_db)):
     try:
         if user is None:
             return raise_error(100002)

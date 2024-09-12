@@ -12,6 +12,8 @@ def get_all(db: Session):
 
 
 def get_by_id(flower_id: int, db: Session) -> FlowerSchema | BaseResponse:
+    if flower_id < 1:
+        return raise_error(10)
     flower = db.query(Flower).filter(Flower.id == flower_id).first()
     if flower is None:
         return raise_error(200003)
@@ -40,6 +42,8 @@ def create(flower: FlowerCreate, db: Session) -> FlowerSchema | BaseResponse:
 
 
 def update(flower_id: int, flower_update: FlowerCreate, db: Session) -> FlowerSchema | BaseResponse:
+    if flower_id < 1:
+        return raise_error(10)
     flower_model = db.query(Flower).filter(Flower.id == flower_id).first()
     if flower_model is None:
         return raise_error(200003)
@@ -62,6 +66,8 @@ def update(flower_id: int, flower_update: FlowerCreate, db: Session) -> FlowerSc
 
 
 def delete(flower_id: int, db: Session) -> BaseResponse:
+    if flower_id < 1:
+        return raise_error(10)
     flower_model = db.query(Flower).filter(Flower.id == flower_id).first()
     if flower_model is None:
         return raise_error(200003)
