@@ -27,7 +27,6 @@ ERROR_CODES = {
     300003: "Order not found!",
 
     400001: "Cannot get information!",
-    400002: "Information not found!",
 
     500001: "Invalid date!"
 }

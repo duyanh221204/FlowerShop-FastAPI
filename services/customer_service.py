@@ -7,7 +7,7 @@ from schemas.order import OrderCreate, OrderResponse, OrderDetailResponse
 from sqlalchemy.orm import Session
 from schemas.base_response import BaseResponse
 from typing import List
-from datetime import datetime
+from datetime import date, datetime
 
 
 def get_all(user_id: int, db: Session) -> List[OrderResponse]:
@@ -128,3 +128,143 @@ def create(user_id: int, order: OrderCreate, db: Session) -> OrderResponse | Bas
         year=order_model.year,
         order_details=order_details_response
     )
+
+
+def daily_orders(user_id: int, day: int, month: int, year: int, db: Session) -> List[OrderResponse] | BaseResponse:
+    try:
+        date(year, month, day)
+    except Exception:
+        return raise_error(500001)
+    orders = db.query(Order).filter(
+        Order.user_id == user_id,
+        Order.day == day,
+        Order.month == month,
+        Order.year == year
+    ).all()
+    orders_response = []
+    for order in orders:
+        order_details = db.query(OrderDetail).filter(OrderDetail.order_id == order.id).all()
+        order_details_response = [
+            OrderDetailResponse(
+                id=detail.id,
+                flower_id=detail.flower_id,
+                quantity=detail.quantity,
+                total_price=detail.total_price
+            )
+            for detail in order_details
+        ]
+        orders_response.append(
+            OrderResponse(
+                id=order.id,
+                total_cost=order.total_cost,
+                day=order.day,
+                month=order.month,
+                year=order.year,
+                order_details=order_details_response
+            )
+        )
+    return orders_response
+
+
+def monthly_orders(user_id: int, month: int, year: int, db: Session) -> List[OrderResponse] | BaseResponse:
+    try:
+        date(year, month, 1)
+    except Exception:
+        return raise_error(500001)
+    orders = db.query(Order).filter(
+        Order.user_id == user_id,
+        Order.month == month,
+        Order.year == year
+    ).all()
+    orders_response = []
+    for order in orders:
+        order_details = db.query(OrderDetail).filter(OrderDetail.order_id == order.id).all()
+        order_details_response = [
+            OrderDetailResponse(
+                id=detail.id,
+                flower_id=detail.flower_id,
+                quantity=detail.quantity,
+                total_price=detail.total_price
+            )
+            for detail in order_details
+        ]
+        orders_response.append(
+            OrderResponse(
+                id=order.id,
+                total_cost=order.total_cost,
+                day=order.day,
+                month=order.month,
+                year=order.year,
+                order_details=order_details_response
+            )
+        )
+    return orders_response
+
+
+def quarterly_orders(user_id: int, quarter: int, year: int, db: Session) -> List[OrderResponse] | BaseResponse:
+    if year < 1:
+        return raise_error(10)
+    if not 1 <= quarter <= 4:
+        return raise_error(11)
+    start_month, end_month = quarter * 3 - 2, quarter * 3
+    orders = db.query(Order).filter(
+        Order.user_id == user_id,
+        Order.month >= start_month,
+        Order.month <= end_month,
+        Order.year == year
+    ).all()
+    orders_response = []
+    for order in orders:
+        order_details = db.query(OrderDetail).filter(OrderDetail.order_id == order.id).all()
+        order_details_response = [
+            OrderDetailResponse(
+                id=detail.id,
+                flower_id=detail.flower_id,
+                quantity=detail.quantity,
+                total_price=detail.total_price
+            )
+            for detail in order_details
+        ]
+        orders_response.append(
+            OrderResponse(
+                id=order.id,
+                total_cost=order.total_cost,
+                day=order.day,
+                month=order.month,
+                year=order.year,
+                order_details=order_details_response
+            )
+        )
+    return orders_response
+
+
+def yearly_orders(user_id: int, year: int, db: Session) -> List[OrderResponse] | BaseResponse:
+    if year < 1:
+        return raise_error(10)
+    orders = db.query(Order).filter(
+        Order.user_id == user_id,
+        Order.year == year
+    ).all()
+    orders_response = []
+    for order in orders:
+        order_details = db.query(OrderDetail).filter(OrderDetail.order_id == order.id).all()
+        order_details_response = [
+            OrderDetailResponse(
+                id=detail.id,
+                flower_id=detail.flower_id,
+                quantity=detail.quantity,
+                total_price=detail.total_price
+            )
+            for detail in order_details
+        ]
+        orders_response.append(
+            OrderResponse(
+                id=order.id,
+                total_cost=order.total_cost,
+                day=order.day,
+                month=order.month,
+                year=order.year,
+                order_details=order_details_response
+            )
+        )
+    return orders_response
